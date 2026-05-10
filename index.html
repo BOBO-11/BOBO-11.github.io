@@ -1,19 +1,855 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <title>我的个人网页</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>林澈 | 个人主页</title>
+  <meta name="description" content="林澈的个人主页：前端开发、数字设计、创意技术与个人作品集。" />
   <style>
+    :root {
+      --bg: #060816;
+      --bg-soft: rgba(255, 255, 255, 0.07);
+      --text: #eef3ff;
+      --muted: #a8b3cf;
+      --primary: #7c5cff;
+      --secondary: #00e5ff;
+      --accent: #ff4ecd;
+      --card: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.14);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      max-width: 700px;
-      margin: 80px auto;
-      line-height: 1.6;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(124, 92, 255, 0.35), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(0, 229, 255, 0.28), transparent 30%),
+        radial-gradient(circle at 50% 80%, rgba(255, 78, 205, 0.2), transparent 34%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+      z-index: -3;
+    }
+
+    .orb {
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 999px;
+      filter: blur(14px);
+      opacity: 0.45;
+      z-index: -2;
+      animation: float 9s ease-in-out infinite alternate;
+    }
+
+    .orb.one {
+      top: -120px;
+      left: -90px;
+      background: radial-gradient(circle, rgba(124, 92, 255, 0.75), transparent 65%);
+    }
+
+    .orb.two {
+      right: -130px;
+      bottom: 12%;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.62), transparent 65%);
+      animation-delay: -3s;
+    }
+
+    .orb.three {
+      left: 45%;
+      bottom: -220px;
+      background: radial-gradient(circle, rgba(255, 78, 205, 0.48), transparent 70%);
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(34px, -26px, 0) scale(1.08); }
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 16px;
+      z-index: 20;
+      margin-top: 16px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(6, 8, 22, 0.62);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .logo {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      box-shadow: 0 0 28px rgba(0, 229, 255, 0.35);
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 22px;
+      font-size: 14px;
+      transition: color 0.25s ease, text-shadow 0.25s ease;
+    }
+
+    nav a:hover {
+      color: var(--text);
+      text-shadow: 0 0 16px rgba(0, 229, 255, 0.55);
+    }
+
+    .hero {
+      min-height: calc(100vh - 74px);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 46px;
+      align-items: center;
+      padding: 82px 0 60px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      margin-bottom: 26px;
+      border: 1px solid rgba(0, 229, 255, 0.28);
+      border-radius: 999px;
+      background: rgba(0, 229, 255, 0.08);
+      color: #c9fbff;
+      font-size: 13px;
+    }
+
+    .pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--secondary);
+      box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.8);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      70% { box-shadow: 0 0 0 10px rgba(0, 229, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+    }
+
+    h1 {
+      font-size: clamp(48px, 8vw, 92px);
+      line-height: 0.94;
+      letter-spacing: -0.07em;
+      margin-bottom: 26px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #fff, #9eefff 36%, #d6c7ff 68%, #ffb4ec);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.9;
+      margin-bottom: 34px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 999px;
+      color: white;
+      text-decoration: none;
+      font-weight: 750;
+      border: 1px solid var(--border);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .btn.primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 16px 42px rgba(0, 229, 255, 0.22);
+    }
+
+    .btn.ghost {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 50px rgba(124, 92, 255, 0.28);
+    }
+
+    .profile-card {
+      position: relative;
+      min-height: 560px;
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.045));
+      backdrop-filter: blur(24px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .profile-card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: conic-gradient(from 180deg, transparent, rgba(0,229,255,.65), transparent, rgba(255,78,205,.5), transparent);
+      opacity: 0.45;
+      animation: spin 8s linear infinite;
+      z-index: -2;
+    }
+
+    .profile-card::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: calc(var(--radius) - 1px);
+      background: rgba(8, 10, 26, 0.82);
+      z-index: -1;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .avatar-wrap {
+      position: relative;
+      height: 270px;
+      border-radius: 24px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,.2), transparent 22%),
+        linear-gradient(135deg, rgba(124,92,255,.85), rgba(0,229,255,.55) 48%, rgba(255,78,205,.75));
+    }
+
+    .avatar-wrap::before {
+      content: "LC";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 104px;
+      font-weight: 900;
+      color: rgba(255,255,255,.92);
+      letter-spacing: -0.1em;
+      text-shadow: 0 22px 60px rgba(0,0,0,.4);
+    }
+
+    .avatar-wrap::after {
+      content: "CREATIVE DEV / AI BUILDER";
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.22);
+      font-size: 12px;
+      letter-spacing: .1em;
+      color: #fff;
+    }
+
+    .card-info {
+      padding: 24px 4px 4px;
+    }
+
+    .card-info h2 {
+      font-size: 30px;
+      margin-bottom: 10px;
+      letter-spacing: -0.04em;
+    }
+
+    .card-info p {
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 18px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.055);
+      color: #dbe5ff;
+      font-size: 13px;
+    }
+
+    section {
+      padding: 72px 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(30px, 4vw, 54px);
+      letter-spacing: -0.06em;
+    }
+
+    .section-title p {
+      max-width: 460px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .glass {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--card);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.22);
+    }
+
+    .about-card {
+      padding: 24px;
+      min-height: 230px;
+      transition: transform .25s ease, border-color .25s ease;
+    }
+
+    .about-card:hover,
+    .project:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0,229,255,.45);
+    }
+
+    .icon {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(124,92,255,.35), rgba(0,229,255,.22));
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 22px;
+    }
+
+    .about-card h3,
+    .project h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .about-card p,
+    .project p {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      padding: 22px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 34px;
+      letter-spacing: -0.05em;
+      background: linear-gradient(90deg, var(--secondary), #fff, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .projects {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+
+    .project {
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      padding: 26px;
+      transition: transform .25s ease, border-color .25s ease;
+    }
+
+    .project.large {
+      min-height: 618px;
+    }
+
+    .project::before {
+      content: "";
+      position: absolute;
+      inset: auto -20% -45% -20%;
+      height: 220px;
+      background: radial-gradient(circle, rgba(0,229,255,.28), transparent 66%);
+      pointer-events: none;
+    }
+
+    .project-tag {
+      display: inline-flex;
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #c9fbff;
+      background: rgba(0,229,255,.09);
+      border: 1px solid rgba(0,229,255,.22);
+      font-size: 13px;
+    }
+
+    .project h3 {
+      font-size: clamp(24px, 3vw, 38px);
+      letter-spacing: -0.05em;
+    }
+
+    .project-visual {
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      bottom: 26px;
+      height: 230px;
+      border-radius: 22px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+        linear-gradient(135deg, rgba(124,92,255,.46), rgba(0,229,255,.18));
+      background-size: 26px 26px, 26px 26px, cover;
+      border: 1px solid rgba(255,255,255,.16);
+      overflow: hidden;
+    }
+
+    .project-visual::before,
+    .project-visual::after {
+      content: "";
+      position: absolute;
+      border-radius: 22px;
+      background: rgba(255,255,255,.11);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+
+    .project-visual::before {
+      width: 54%;
+      height: 64%;
+      left: 9%;
+      top: 18%;
+    }
+
+    .project-visual::after {
+      width: 32%;
+      height: 42%;
+      right: 10%;
+      top: 30%;
+      background: linear-gradient(135deg, rgba(255,78,205,.28), rgba(0,229,255,.16));
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 10px;
+      bottom: 10px;
+      width: 1px;
+      background: linear-gradient(var(--secondary), var(--accent));
+    }
+
+    .time-item {
+      position: relative;
+      padding: 0 0 28px 28px;
+    }
+
+    .time-item::before {
+      content: "";
+      position: absolute;
+      left: -18px;
+      top: 6px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--secondary);
+      box-shadow: 0 0 18px rgba(0,229,255,.8);
+    }
+
+    .time-item small {
+      color: #8eefff;
+    }
+
+    .time-item h3 {
+      margin: 7px 0 8px;
+      font-size: 20px;
+    }
+
+    .time-item p {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .contact-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+      padding: 34px;
+      border-radius: 32px;
+      background:
+        linear-gradient(135deg, rgba(124,92,255,.28), rgba(0,229,255,.10)),
+        rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: var(--shadow);
+    }
+
+    .contact-box h2 {
+      font-size: clamp(30px, 5vw, 58px);
+      letter-spacing: -0.06em;
+      margin-bottom: 12px;
+    }
+
+    .contact-box p {
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 650px;
+    }
+
+    footer {
+      padding: 28px 0 44px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      animation: reveal .75s ease forwards;
+    }
+
+    .delay-1 { animation-delay: .12s; }
+    .delay-2 { animation-delay: .24s; }
+    .delay-3 { animation-delay: .36s; }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .projects,
+      .contact-box {
+        grid-template-columns: 1fr;
+      }
+
+      .grid,
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      nav {
+        display: none;
+      }
+
+      .profile-card {
+        min-height: auto;
+      }
+
+      .project.large {
+        min-height: 520px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .hero {
+        padding-top: 56px;
+      }
+
+      .grid,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        display: block;
+      }
+
+      .section-title p {
+        margin-top: 12px;
+      }
+
+      .contact-box {
+        padding: 24px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>你好，我是 Bobo</h1>
-  <p>这是我的个人网页。</p>
-  <p>我会在这里展示我的作品、想法和联系方式。</p>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <div class="orb three"></div>
+
+  <header class="shell">
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">L</div>
+        <span>Lin Che</span>
+      </div>
+      <nav aria-label="主导航">
+        <a href="#about">关于</a>
+        <a href="#projects">项目</a>
+        <a href="#experience">经历</a>
+        <a href="#contact">联系</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero shell">
+      <div class="reveal">
+        <div class="eyebrow"><span class="pulse"></span>正在探索 AI × Web × Design</div>
+        <h1>你好，我是<br><span class="gradient-text">李军波</span></h1>
+        <p>
+          一名热衷于创造数字体验的前端开发者与视觉设计爱好者。我喜欢把复杂的信息变成清晰、漂亮、可交互的产品，也喜欢用代码做一点有未来感的东西。
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="#projects">查看作品 →</a>
+          <a class="btn ghost" href="mailto:hello@linche.dev">hello@linche.dev</a>
+        </div>
+      </div>
+
+      <aside class="profile-card reveal delay-1" aria-label="个人资料卡片">
+        <div class="avatar-wrap"></div>
+        <div class="card-info">
+          <h2>Creative Developer</h2>
+          <p>专注于高质感网页、交互原型、AI 工具与品牌视觉系统。相信优秀的产品应该兼具速度、秩序与惊喜。</p>
+          <div class="chips">
+            <span class="chip">Frontend</span>
+            <span class="chip">UI/UX</span>
+            <span class="chip">AI Tools</span>
+            <span class="chip">Motion</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="about" class="shell">
+      <div class="section-title reveal">
+        <h2>关于我</h2>
+        <p>我把自己定义为“会设计的开发者”，擅长在审美、性能和实用性之间找到平衡。</p>
+      </div>
+
+      <div class="grid">
+        <article class="about-card glass reveal delay-1">
+          <div class="icon">⚡</div>
+          <h3>快速落地</h3>
+          <p>从想法、线框、视觉稿到可上线页面，我喜欢用最短路径验证创意，并不断打磨细节。</p>
+        </article>
+        <article class="about-card glass reveal delay-2">
+          <div class="icon">🎨</div>
+          <h3>视觉表达</h3>
+          <p>偏爱高级感、科技感、克制但有记忆点的设计语言，重视动效和留白带来的体验。</p>
+        </article>
+        <article class="about-card glass reveal delay-3">
+          <div class="icon">🤖</div>
+          <h3>AI 增强</h3>
+          <p>正在探索 AI 在个人效率、内容生成、数据洞察和网页交互中的更多可能性。</p>
+        </article>
+      </div>
+
+      <div class="stats">
+        <div class="stat glass reveal delay-1"><strong>18+</strong><span>完成项目</span></div>
+        <div class="stat glass reveal delay-2"><strong>4</strong><span>年学习与实践</span></div>
+        <div class="stat glass reveal delay-3"><strong>12k</strong><span>代码提交行数</span></div>
+        <div class="stat glass reveal delay-3"><strong>99%</strong><span>持续好奇心</span></div>
+      </div>
+    </section>
+
+    <section id="projects" class="shell">
+      <div class="section-title reveal">
+        <h2>精选项目</h2>
+        <p>以下内容是虚构示例，你可以替换成自己的 GitHub 项目、课程作业、设计作品或创业想法。</p>
+      </div>
+
+      <div class="projects">
+        <article class="project large glass reveal delay-1">
+          <span class="project-tag">Featured / Web App</span>
+          <h3>Nova Dashboard</h3>
+          <p>一个面向个人效率管理的 AI 仪表盘，聚合待办、灵感、日程和数据洞察，使用模块化卡片呈现信息。</p>
+          <div class="project-visual" aria-hidden="true"></div>
+        </article>
+
+        <div class="stack">
+          <article class="project glass reveal delay-2">
+            <span class="project-tag">Brand Site</span>
+            <h3>Aurora Studio</h3>
+            <p>为虚构创意工作室设计的品牌官网，强调渐变、玻璃拟态与沉浸式滚动体验。</p>
+          </article>
+          <article class="project glass reveal delay-3">
+            <span class="project-tag">Tool / AI</span>
+            <h3>Prompt Lab</h3>
+            <p>一个用于整理、测试和复用提示词的小工具，帮助创作者建立自己的 AI 工作流。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="shell">
+      <div class="section-title reveal">
+        <h2>成长轨迹</h2>
+        <p>每一次项目都是一次升级：从会写页面，到能设计体验，再到思考产品价值。</p>
+      </div>
+
+      <div class="timeline glass reveal delay-1" style="padding: 30px 30px 2px;">
+        <div class="time-item">
+          <small>2025 — Now</small>
+          <h3>独立开发个人项目</h3>
+          <p>构建个人主页、作品集、AI 小工具和数据可视化 Demo，持续提升工程化与设计能力。</p>
+        </div>
+        <div class="time-item">
+          <small>2024 — 2025</small>
+          <h3>深入学习前端工程</h3>
+          <p>系统学习 HTML、CSS、JavaScript、React、响应式布局与交互动效，开始关注代码质量和用户体验。</p>
+        </div>
+        <div class="time-item">
+          <small>2023 — 2024</small>
+          <h3>开始数字创作</h3>
+          <p>从视觉设计和网页排版入门，尝试把审美兴趣转化为可展示、可分享的在线作品。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="shell">
+      <div class="contact-box reveal">
+        <div>
+          <h2>一起做点酷的？</h2>
+          <p>欢迎交流前端开发、个人网站、AI 工具、设计灵感或任何有趣的数字创意。你也可以把这里换成微信、邮箱、GitHub 或 LinkedIn 链接。</p>
+        </div>
+        <a class="btn primary" href="mailto:hello@linche.dev">联系我</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">
+    © 2026 Lin Che. Built with curiosity, code and caffeine.
+  </footer>
+
+  <script>
+    const cards = document.querySelectorAll('.profile-card, .glass');
+
+    cards.forEach((card) => {
+      card.addEventListener('mousemove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const rotateX = ((y / rect.height) - 0.5) * -8;
+        const rotateY = ((x / rect.width) - 0.5) * 8;
+        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+  </script>
 </body>
 </html>
